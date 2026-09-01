@@ -12,14 +12,21 @@ class Pengembalian extends Model
         'peminjaman_id',
         'petugas_id',
         'tgl_kembali',
-        'hari_terlambat',
-        'denda',
         'denda_kerusakan',
-        'total_denda',
         'catatan',
     ];
 
     protected $casts = [
         'tgl_kembali' => 'date',
     ];
+
+    public function peminjaman()
+    {
+        return $this->belongsTo(Peminjaman::class, 'peminjaman_id');
+    }
+
+    public function petugas()
+    {
+        return $this->belongsTo(User::class, 'petugas_id');
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusPeminjaman;
 use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
@@ -21,8 +22,37 @@ class Peminjaman extends Model
     ];
 
     protected $casts = [
-        'tgl_pinjam' => 'date',
-        'tgl_harus_kembali' => 'date',
+        'tgl_pinjam'           => 'date',
+        'tgl_harus_kembali'     => 'date',
         'tgl_diajukan_kembali' => 'date',
+        'status'               => StatusPeminjaman::class,
     ];
+
+    public function peminjam()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function petugas()
+    {
+        return $this->belongsTo(User::class, 'petugas_id');
+    }
+
+    public function detail()
+    {
+        return $this->hasMany(DetailPeminjaman::class, 'peminjaman_id');
+    }
+
+    public function pengembalian()
+    {
+        return $this->hasOne(Pengembalian::class, 'peminjaman_id');
+    }
+
+    public function lewatTenggat(): bool
+    {
+        return in_array($this->status, [
+            StatusPeminjaman::Dipinjam,
+            StatusPeminjaman::MenungguVerifikasi,
+        ], true) && $this->tgl_harus_kembali->isPast();
+    }
 }

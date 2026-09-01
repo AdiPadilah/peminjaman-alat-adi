@@ -28,14 +28,73 @@
                 @endcan
                 @can('peminjaman.setujui')
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Persetujuan</a>
+                        <a class="nav-link {{ request()->routeIs('persetujuan.*') ? 'active' : '' }}"
+                           href="{{ route('persetujuan.antrian') }}">Persetujuan</a>
+                    </li>
+                @endcan
+                @can('pengembalian.pantau')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('pengembalian.pantau') ? 'active' : '' }}"
+                           href="{{ route('pengembalian.pantau') }}">Pemantauan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('pengembalian.antrian') || request()->routeIs('pengembalian.verifikasi') ? 'active' : '' }}"
+                           href="{{ route('pengembalian.antrian') }}">Verifikasi</a>
+                    </li>
+                @endcan
+                @can('laporan.cetak')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('laporan.*') ? 'active' : '' }}"
+                           href="{{ route('laporan.form') }}">Laporan</a>
                     </li>
                 @endcan
                 @can('alat.lihat')
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Katalog Alat</a>
+                        <a class="nav-link {{ request()->routeIs('katalog.daftar') ? 'active' : '' }}"
+                           href="{{ route('katalog.daftar') }}">Katalog Alat</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('katalog.keranjang') ? 'active' : '' }}"
+                           href="{{ route('katalog.keranjang') }}">
+                            Keranjang
+                            @if (count(session('keranjang', [])) > 0)
+                                <span class="badge bg-warning text-dark">
+                                    {{ count(session('keranjang', [])) }}
+                                </span>
+                            @endif
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}"
+                           href="{{ route('peminjaman.saya') }}">Pinjaman Saya</a>
                     </li>
                 @endcan
+                @can('log.lihat')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('log.*') ? 'active' : '' }}"
+                           href="{{ route('log.index') }}">Log Aktivitas</a>
+                    </li>
+                @endcan
+                @can('peminjaman.kelola')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('koreksi.peminjaman.*') ? 'active' : '' }}"
+                           href="{{ route('koreksi.peminjaman.daftar') }}">Data Peminjaman</a>
+                    </li>
+                @endcan
+                @can('pengembalian.kelola')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('koreksi.pengembalian.*') ? 'active' : '' }}"
+                           href="{{ route('koreksi.pengembalian.daftar') }}">Data Pengembalian</a>
+                    </li>
+                @endcan
+                @can('pengaturan.kelola')
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('pengaturan.*') ? 'active' : '' }}"
+                           href="{{ route('pengaturan.form') }}">Pengaturan</a>
+                    </li>
+                @endcan
+
+
             </ul>
 
             @auth

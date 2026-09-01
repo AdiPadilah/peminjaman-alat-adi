@@ -15,4 +15,14 @@ class DetailPeminjaman extends Model
         'kondisi_kembali',
         'denda',
     ];
+
+    public function peminjaman()
+    {
+        return $this->belongsTo(Peminjaman::class, 'peminjaman_id');
+    }
+
+    public function alat()
+    {
+        return $this->belongsTo(Alat::class, 'alat_id');
+    }
 }

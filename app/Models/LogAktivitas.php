@@ -16,5 +16,15 @@ class LogAktivitas extends Model
         'tabel_tujuan',
         'deskripsi',
         'ip_address',
+        
     ];
+        protected $casts = [
+        'created_at' => 'datetime',
+    ];
+
+    public function pengguna()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }
