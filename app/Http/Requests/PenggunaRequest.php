@@ -24,10 +24,10 @@ class PenggunaRequest extends FormRequest
                 Rule::unique('users', 'username')->ignore($penggunaId),
             ],
             'email' => [
-                'nullable', 'email', 'max:100',
+                'required', 'email', 'max:100',
                 Rule::unique('users', 'email')->ignore($penggunaId),
             ],
-            'no_telp'  => ['nullable', 'string', 'regex:/^[0-9]+$/', 'min:9', 'max:18'],
+            'no_telp'  => ['required', 'string', 'regex:/^[0-9]+$/', 'min:9', 'max:18'],
             'password' => [
                 $isUpdate ? 'nullable' : 'required',
                 'string', 'min:8', 'confirmed',

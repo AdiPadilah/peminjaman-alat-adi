@@ -12,6 +12,13 @@ class PengajuanRequest extends FormRequest
         return $this->user()->can('peminjaman.ajukan');
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'tgl_pinjam' => now()->toDateString(),
+        ]);
+    }
+
     public function rules(): array
     {
         $maksHari   = (int) Pengaturan::ambil('maks_hari_pinjam', 30);

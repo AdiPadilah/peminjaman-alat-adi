@@ -29,10 +29,10 @@
 
                         <div class="row">
                             <div class="col-md-6">
-                                <x-input label="Email" name="email" :value="$pengguna->email" type="email" />
+                                <x-input label="Email" name="email" :value="$pengguna->email" type="email" required />
                             </div>
                             <div class="col-md-6">
-                                <x-input label="Nomor Telepon" name="no_telp" :value="$pengguna->no_telp" />
+                                <x-input label="Nomor Telepon" name="no_telp" :value="$pengguna->no_telp" required />
                             </div>
                         </div>
 

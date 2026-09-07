@@ -9,7 +9,7 @@
             @csrf
 
             <x-input label="Tanggal Pinjam" type="date" name="tgl_pinjam"
-                     :value="old('tgl_pinjam', now()->toDateString())" required />
+                     :value="now()->toDateString()" readonly required />
 
             <x-input label="Tanggal Harus Kembali" type="date" name="tgl_harus_kembali"
                      :value="old('tgl_harus_kembali', now()->addDays($defaultHari)->toDateString())" required />
