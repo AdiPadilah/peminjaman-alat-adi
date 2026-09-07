@@ -12,7 +12,9 @@ class DetailPeminjaman extends Model
         'peminjaman_id',
         'alat_id',
         'jumlah',
+        'foto_sebelum',
         'kondisi_kembali',
+        'foto_sesudah',
         'denda',
     ];
 
@@ -24,5 +26,15 @@ class DetailPeminjaman extends Model
     public function alat()
     {
         return $this->belongsTo(Alat::class, 'alat_id');
+    }
+
+    public function getUrlFotoSebelumAttribute(): ?string
+    {
+        return $this->foto_sebelum ? asset('gambar/kondisi/' . $this->foto_sebelum) : null;
+    }
+
+    public function getUrlFotoSesudahAttribute(): ?string
+    {
+        return $this->foto_sesudah ? asset('gambar/kondisi/' . $this->foto_sesudah) : null;
     }
 }

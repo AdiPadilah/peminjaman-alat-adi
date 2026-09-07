@@ -39,22 +39,69 @@
     </div>
 
     <div class="card">
-        <div class="card-header">Daftar Alat</div>
+        <div class="card-header">Daftar Alat & Bukti Kondisi Fisik</div>
         <div class="card-body p-0">
-            <table class="table mb-0">
+            <table class="table align-middle mb-0">
                 <thead>
                     <tr>
-                        <th>Kode</th>
-                        <th>Nama Alat</th>
-                        <th class="text-center">Jumlah</th>
+                        <th>Kode & Nama Alat</th>
+                        <th class="text-center" style="width: 80px;">Jumlah</th>
+                        <th class="text-center" style="width: 110px;">Foto Sebelum</th>
+                        @if ($peminjaman->detail->contains(fn($d) => !empty($d->kondisi_kembali)))
+                            <th style="width: 130px;">Kondisi Kembali</th>
+                            <th class="text-center" style="width: 110px;">Foto Sesudah</th>
+                            <th class="text-end" style="width: 120px;">Denda</th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($peminjaman->detail as $baris)
                         <tr>
-                            <td>{{ $baris->alat->kode_alat }}</td>
-                            <td>{{ $baris->alat->nama }}</td>
+                            <td>
+                                <div class="fw-semibold">{{ $baris->alat->nama }}</div>
+                                <small class="text-muted">{{ $baris->alat->kode_alat }}</small>
+                            </td>
                             <td class="text-center">{{ $baris->jumlah }}</td>
+                            <td class="text-center">
+                                @if ($baris->url_foto_sebelum)
+                                    <img src="{{ $baris->url_foto_sebelum }}" 
+                                         alt="Foto Sebelum" 
+                                         class="rounded border img-pratinjau shadow-sm cursor-pointer"
+                                         style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;"
+                                         data-judul="Kondisi Sebelum: {{ $baris->alat->nama }}"
+                                         data-info="Foto fisik saat persetujuan/serah terima alat"
+                                         title="Klik untuk memperbesar">
+                                @else
+                                    <span class="badge bg-light text-muted border">Tidak ada</span>
+                                @endif
+                            </td>
+                            @if ($peminjaman->detail->contains(fn($d) => !empty($d->kondisi_kembali)))
+                                <td>
+                                    @if ($baris->kondisi_kembali)
+                                        <span class="badge bg-{{ $baris->kondisi_kembali === 'baik' ? 'success' : 'danger' }}">
+                                            {{ ucwords(str_replace('_', ' ', $baris->kondisi_kembali)) }}
+                                        </span>
+                                    @else
+                                        <span class="text-muted">-</span>
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($baris->url_foto_sesudah)
+                                        <img src="{{ $baris->url_foto_sesudah }}" 
+                                             alt="Foto Sesudah" 
+                                             class="rounded border img-pratinjau shadow-sm cursor-pointer"
+                                             style="width: 50px; height: 50px; object-fit: cover; cursor: pointer;"
+                                             data-judul="Kondisi Sesudah: {{ $baris->alat->nama }}"
+                                             data-info="Foto fisik saat pengembalian ({{ ucwords(str_replace('_', ' ', $baris->kondisi_kembali)) }})"
+                                             title="Klik untuk memperbesar">
+                                    @else
+                                        <span class="badge bg-light text-muted border">Tidak ada</span>
+                                    @endif
+                                </td>
+                                <td class="text-end fw-semibold">
+                                    Rp {{ number_format($baris->denda, 0, ',', '.') }}
+                                </td>
+                            @endif
                         </tr>
                     @endforeach
                 </tbody>

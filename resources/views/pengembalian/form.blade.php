@@ -8,7 +8,7 @@
         <a href="{{ route('pengembalian.antrian') }}" class="btn btn-outline-secondary">Kembali</a>
     </div>
 
-    <form method="POST" action="{{ route('pengembalian.simpan', $peminjaman) }}">
+    <form method="POST" action="{{ route('pengembalian.simpan', $peminjaman) }}" enctype="multipart/form-data">
         @csrf
 
         <div class="row">

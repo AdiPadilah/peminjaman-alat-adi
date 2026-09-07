@@ -62,9 +62,15 @@ class PengembalianController extends Controller
                 'required',
                 Rule::in(['baik', 'rusak_ringan', 'rusak_berat', 'hilang']),
             ],
+            'foto_file'       => ['nullable', 'array'],
+            'foto_file.*'     => ['nullable', 'image', 'max:5120'],
+            'foto_kamera'     => ['nullable', 'array'],
+            'foto_kamera.*'   => ['nullable', 'string'],
         ], [
-            'kondisi.required' => 'Kondisi setiap alat wajib diisi.',
-            'kondisi.size'     => 'Kondisi setiap alat wajib diisi.',
+            'kondisi.required'   => 'Kondisi setiap alat wajib diisi.',
+            'kondisi.size'       => 'Kondisi setiap alat wajib diisi.',
+            'foto_file.*.image'  => 'Berkas harus berupa gambar.',
+            'foto_file.*.max'    => 'Ukuran foto maksimal 5MB.',
         ]);
 
         $pengembalian = $this->layanan->verifikasi(
@@ -73,7 +79,9 @@ class PengembalianController extends Controller
             $data['kondisi'],
             $data['tgl_kembali'],
             (float) ($data['denda_kerusakan'] ?? 0),
-            $data['catatan'] ?? null
+            $data['catatan'] ?? null,
+            $request->file('foto_file') ?? [],
+            $data['foto_kamera'] ?? []
         );
 
         return redirect()

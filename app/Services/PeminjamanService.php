@@ -7,13 +7,16 @@ use App\Models\LogAktivitas;
 use App\Models\Peminjaman;
 use App\Models\Pengaturan;
 use App\Models\User;
+use App\Services\LayananFotoKondisi;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class PeminjamanService
 {
-    public function __construct(private Keranjang $keranjang)
-    {
+    public function __construct(
+        private Keranjang $keranjang,
+        private LayananFotoKondisi $layananFoto
+    ) {
     }
 
     public function daftarTunggakan(User $peminjam)
@@ -95,7 +98,9 @@ class PeminjamanService
     public function setujui(
         Peminjaman $peminjaman,
         int $petugasId,
-        ?string $tenggatBaru = null
+        ?string $tenggatBaru = null,
+        array $fotoFile = [],
+        array $fotoKamera = []
     ): void {
         abort_unless(
             $peminjaman->status->bolehKe(StatusPeminjaman::Dipinjam),
@@ -106,6 +111,17 @@ class PeminjamanService
         DB::beginTransaction();
 
         try {
+            // Simpan foto kondisi sebelum jika ada
+            foreach ($peminjaman->detail as $detail) {
+                $file   = $fotoFile[$detail->id] ?? null;
+                $kamera = $fotoKamera[$detail->id] ?? null;
+
+                $namaFoto = $this->layananFoto->simpan('sebelum', $detail->id, $file, $kamera, $detail->foto_sebelum);
+                if ($namaFoto) {
+                    $detail->update(['foto_sebelum' => $namaFoto]);
+                }
+            }
+
             if ($tenggatBaru && $tenggatBaru !== $peminjaman->tgl_harus_kembali->toDateString()) {
                 $tenggatLama = $peminjaman->tgl_harus_kembali->toDateString();
 

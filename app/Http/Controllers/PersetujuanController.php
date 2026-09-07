@@ -34,13 +34,22 @@ class PersetujuanController extends Controller
                 'required', 'date',
                 'after_or_equal:' . $peminjaman->tgl_pinjam->toDateString(),
             ],
+            'foto_file'       => ['nullable', 'array'],
+            'foto_file.*'     => ['nullable', 'image', 'max:5120'],
+            'foto_kamera'     => ['nullable', 'array'],
+            'foto_kamera.*'   => ['nullable', 'string'],
+        ], [
+            'foto_file.*.image' => 'Berkas harus berupa gambar.',
+            'foto_file.*.max'   => 'Ukuran foto maksimal 5MB.',
         ]);
 
         try {
             $this->layanan->setujui(
                 $peminjaman,
                 auth()->id(),
-                $data['tgl_harus_kembali']
+                $data['tgl_harus_kembali'],
+                $request->file('foto_file') ?? [],
+                $data['foto_kamera'] ?? []
             );
         } catch (QueryException $e) {
             return back()->with('gagal', $this->pesanRamah($e));

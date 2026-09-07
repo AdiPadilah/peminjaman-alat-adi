@@ -7,10 +7,15 @@ use App\Models\DetailPeminjaman;
 use App\Models\LogAktivitas;
 use App\Models\Peminjaman;
 use App\Models\Pengembalian;
+use App\Services\LayananFotoKondisi;
 use Illuminate\Support\Facades\DB;
 
 class PengembalianService
 {
+    public function __construct(private LayananFotoKondisi $layananFoto)
+    {
+    }
+
     public function antrianVerifikasi()
     {
         return Peminjaman::with(['peminjam', 'detail.alat'])
@@ -36,7 +41,9 @@ class PengembalianService
         array $kondisiPerBaris,
         string $tglKembali,
         float $dendaKerusakan = 0,
-        ?string $catatan = null
+        ?string $catatan = null,
+        array $fotoFile = [],
+        array $fotoKamera = []
     ): Pengembalian {
         abort_unless(
             $peminjaman->status->bolehKe(StatusPeminjaman::Selesai),
@@ -48,9 +55,23 @@ class PengembalianService
 
         try {
             foreach ($kondisiPerBaris as $detailId => $kondisi) {
-                DetailPeminjaman::where('id', $detailId)
+                $detail = DetailPeminjaman::where('id', $detailId)
                     ->where('peminjaman_id', $peminjaman->id)
-                    ->update(['kondisi_kembali' => $kondisi]);
+                    ->first();
+
+                if ($detail) {
+                    $file   = $fotoFile[$detailId] ?? null;
+                    $kamera = $fotoKamera[$detailId] ?? null;
+
+                    $updateData = ['kondisi_kembali' => $kondisi];
+
+                    $namaFoto = $this->layananFoto->simpan('sesudah', $detailId, $file, $kamera, $detail->foto_sesudah);
+                    if ($namaFoto) {
+                        $updateData['foto_sesudah'] = $namaFoto;
+                    }
+
+                    $detail->update($updateData);
+                }
             }
 
             $tglDiajukan = $peminjaman->tgl_diajukan_kembali?->toDateString();

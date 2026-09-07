@@ -1,7 +1,7 @@
 <div class="card mb-3">
     <div class="card-header">Setujui</div>
     <div class="card-body">
-        <form method="POST" action="{{ route('persetujuan.setujui', $peminjaman) }}">
+        <form id="formSetujuiPeminjaman" method="POST" action="{{ route('persetujuan.setujui', $peminjaman) }}" enctype="multipart/form-data">
             @csrf
             <x-input label="Tanggal Harus Kembali" name="tgl_harus_kembali" type="date"
                      :value="$peminjaman->tgl_harus_kembali->toDateString()" required />
