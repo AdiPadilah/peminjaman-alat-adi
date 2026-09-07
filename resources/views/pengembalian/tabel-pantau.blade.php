@@ -1,4 +1,4 @@
-<table class="table table-striped align-middle">
+<table class="table align-middle">
     <thead>
         <tr>
             <th>Kode Pinjam</th>
@@ -10,18 +10,24 @@
     </thead>
     <tbody>
         @forelse ($daftarPeminjaman as $peminjaman)
-            <tr class="{{ $peminjaman->lewatTenggat() ? 'table-warning' : '' }}">
-                <td>{{ $peminjaman->kode_pinjam }}</td>
-                <td>{{ $peminjaman->peminjam->nama }}</td>
+            <tr class="{{ $peminjaman->lewatTenggat() ? 'bg-warning-subtle' : '' }}">
+                <td class="fw-semibold">
+                    <span class="badge badge-soft-secondary font-monospace">{{ $peminjaman->kode_pinjam }}</span>
+                </td>
                 <td>
-                    {{ $peminjaman->tgl_harus_kembali->format('d/m/Y') }}
+                    <div class="fw-bold text-dark">{{ $peminjaman->peminjam->nama }}</div>
+                </td>
+                <td>
+                    <span class="fw-medium">{{ $peminjaman->tgl_harus_kembali->format('d/m/Y') }}</span>
                     @if ($peminjaman->lewatTenggat())
-                        <span class="badge bg-danger ms-1">
+                        <span class="badge badge-soft-danger ms-1">
                             Terlambat {{ (int) $peminjaman->tgl_harus_kembali->startOfDay()->diffInDays(now()->startOfDay()) }} hari
                         </span>
                     @endif
                 </td>
-                <td class="text-center">{{ $peminjaman->detail()->count() }}</td>
+                <td class="text-center">
+                    <span class="badge badge-soft-info">{{ $peminjaman->detail()->count() }} Item</span>
+                </td>
                 <td>
                     <span class="badge bg-{{ $peminjaman->status->warna() }}">
                         {{ $peminjaman->status->label() }}
@@ -30,8 +36,9 @@
             </tr>
         @empty
             <tr>
-                <td colspan="5" class="text-center text-muted">
-                    Tidak ada peminjaman yang sedang berjalan.
+                <td colspan="5" class="text-center py-5 text-muted">
+                    <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                    Tidak ada peminjaman alat yang sedang berjalan.
                 </td>
             </tr>
         @endforelse

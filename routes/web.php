@@ -9,18 +9,26 @@ use App\Http\Controllers\PenggunaController;
 use App\Http\Controllers\PersetujuanController;
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LogAktivitasController;
-use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\DasborController;
 use App\Http\Controllers\KoreksiPeminjamanController;
 use App\Http\Controllers\KoreksiPengembalianController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\LogAktivitasController;
 use App\Http\Controllers\PengaturanController;
 
 Route::get('/', function () {
     if (auth()->check()) {
         return redirect()->route('dasbor');
     }
-    return redirect()->route('login');
-});
+
+    $totalAlat = \App\Models\Alat::count();
+    $alatPopuler = \App\Models\Alat::with('kategori')
+        ->where('stok_tersedia', '>', 0)
+        ->take(6)
+        ->get();
+
+    return view('onboarding', compact('totalAlat', 'alatPopuler'));
+})->name('beranda');
 
 Route::middleware(['auth'])->group(function () {
 
@@ -39,17 +47,17 @@ Route::middleware(['auth'])->group(function () {
         return redirect()->route('peminjam.dasbor');
     })->name('dasbor');
 
-    Route::get('/admin/dasbor', function () {
-        return view('dasbor.admin');
-    })->middleware('role:admin')->name('admin.dasbor');
+    Route::get('/admin/dasbor', [DasborController::class, 'admin'])
+        ->middleware('role:admin')
+        ->name('admin.dasbor');
 
-    Route::get('/petugas/dasbor', function () {
-        return view('dasbor.petugas');
-    })->middleware('role:petugas')->name('petugas.dasbor');
+    Route::get('/petugas/dasbor', [DasborController::class, 'petugas'])
+        ->middleware('role:petugas')
+        ->name('petugas.dasbor');
 
-    Route::get('/peminjam/dasbor', function () {
-        return view('dasbor.peminjam');
-    })->middleware('role:peminjam')->name('peminjam.dasbor');
+    Route::get('/peminjam/dasbor', [DasborController::class, 'peminjam'])
+        ->middleware('role:peminjam')
+        ->name('peminjam.dasbor');
 
     // Master Data - Kategori
     Route::resource('kategori', KategoriController::class)

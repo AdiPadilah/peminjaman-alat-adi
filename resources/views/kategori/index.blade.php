@@ -3,36 +3,47 @@
 @section('judul', 'Daftar Kategori')
 
 @section('konten')
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="mb-0">Daftar Kategori</h4>
-        <x-tombol-tambah :href="route('kategori.create')" label="Tambah Kategori" />
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
+        <div>
+            <h4 class="mb-1 fw-bold text-dark">
+                <i class="bi bi-tags text-primary me-2"></i>Daftar Kategori Alat
+            </h4>
+            <p class="text-muted small mb-0">Kelola kategori pengelompokan alat praktikum laboratorium.</p>
+        </div>
+        <x-tombol-tambah :href="route('kategori.create')" label="Tambah Kategori Baru" />
     </div>
 
-    <div class="card">
+    <div class="card border-0 shadow-sm">
         <div class="card-body">
             <form method="GET" action="{{ route('kategori.index') }}" class="row g-2 mb-3">
-                <x-form-pencarian :action="route('kategori.index')" placeholder="Cari..." :kataKunci="$kataKunci" />
+                <x-form-pencarian :action="route('kategori.index')" placeholder="Cari nama kategori..." :kataKunci="$kataKunci" />
             </form>
 
             <div class="table-responsive">
-                <table class="table table-striped align-middle">
+                <table class="table align-middle">
                     <thead>
                         <tr>
-                            <th style="width: 60px">No</th>
-                            <th>Nama</th>
+                            <th style="width: 70px">No</th>
+                            <th>Nama Kategori</th>
                             <th>Deskripsi</th>
-                            <th style="width: 110px">Jumlah Alat</th>
-                            <th style="width: 160px">Aksi</th>
+                            <th class="text-center" style="width: 140px">Jumlah Alat</th>
+                            <th class="text-end pe-3" style="width: 160px">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($daftarKategori as $nomor => $kategori)
                             <tr>
-                                <td>{{ $daftarKategori->firstItem() + $nomor }}</td>
-                                <td>{{ $kategori->nama }}</td>
-                                <td>{{ $kategori->deskripsi ?: '-' }}</td>
-                                <td>{{ $kategori->daftar_alat_count }}</td>
+                                <td class="text-muted">{{ $daftarKategori->firstItem() + $nomor }}</td>
                                 <td>
+                                    <div class="fw-bold text-dark">{{ $kategori->nama }}</div>
+                                </td>
+                                <td>{{ $kategori->deskripsi ?: '-' }}</td>
+                                <td class="text-center">
+                                    <span class="badge badge-soft-primary">
+                                        {{ $kategori->daftar_alat_count }} Alat
+                                    </span>
+                                </td>
+                                <td class="text-end pe-3">
                                     <x-tombol-aksi
                                         :ubah="route('kategori.edit', $kategori)"
                                         :hapus="route('kategori.destroy', $kategori)"
@@ -41,8 +52,9 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="5" class="text-center text-muted">
-                                    Belum ada data kategori.
+                                <td colspan="5" class="text-center py-5 text-muted">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
+                                    Belum ada data kategori ditemukan.
                                 </td>
                             </tr>
                         @endforelse
@@ -50,7 +62,9 @@
                 </table>
             </div>
 
-            {{ $daftarKategori->links() }}
+            <div class="mt-4">
+                {{ $daftarKategori->links() }}
+            </div>
         </div>
     </div>
 @endsection
