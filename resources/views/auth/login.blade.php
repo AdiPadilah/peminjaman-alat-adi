@@ -11,7 +11,7 @@
         <div class="auth-single-card">
             {{-- Brand & Header --}}
             <div class="text-center mb-4">
-                <img src="{{ asset('images/logo.jpg') }}" alt="Logo Portal" class="mx-auto mb-3 d-block" style="width: 72px; height: 72px; border-radius: 18px; box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 8px 24px rgba(0,0,0,0.4);">
+                <img src="{{ asset('images/logo.jpg') }}" alt="Logo Portal" class="brand-logo-animated mx-auto mb-3 d-block" style="width: 72px; height: 72px; border-radius: 18px; box-shadow: 0 0 30px rgba(99, 102, 241, 0.5), 0 8px 24px rgba(0,0,0,0.4);">
 
                 <h4 class="fw-bold text-white mb-1">Masuk ke Sistem</h4>
                 <p class="text-secondary small mb-0">Portal Peminjaman Alat Laboratorium</p>

@@ -58,6 +58,38 @@ main.main-content {
     letter-spacing: -0.02em;
 }
 
+/* ==========================================================================
+   Animated Brand Logo (Floating & Neon Pulse Glow)
+   ========================================================================== */
+@keyframes logoFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+@keyframes logoPulseGlow {
+    0%, 100% {
+        filter: drop-shadow(0 0 6px rgba(99, 102, 241, 0.45));
+    }
+    50% {
+        filter: drop-shadow(0 0 14px rgba(139, 92, 246, 0.8)) drop-shadow(0 0 5px rgba(6, 182, 212, 0.6));
+    }
+}
+
+.brand-logo-animated {
+    animation: logoFloat 3s ease-in-out infinite, logoPulseGlow 2.5s ease-in-out infinite alternate;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+    display: inline-block;
+}
+
+.brand-logo-animated:hover {
+    transform: scale(1.12) rotate(-3deg);
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.95)) drop-shadow(0 0 10px rgba(6, 182, 212, 0.85));
+}
+
 .brand-icon-wrapper {
     width: 38px;
     height: 38px;
@@ -546,18 +578,24 @@ main.main-content {
     height: 170px;
     position: relative;
     overflow: hidden;
-    background-color: #f1f5f9;
+    background-color: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .product-image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    max-width: 90%;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
     transition: transform 0.3s ease;
 }
 
 .product-card:hover .product-image-container img {
-    transform: scale(1.05);
+    transform: scale(1.04);
 }
 
 .product-badge-float {

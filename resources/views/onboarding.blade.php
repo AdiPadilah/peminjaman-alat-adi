@@ -25,7 +25,7 @@
     <nav class="landing-navbar-floating">
         <div class="landing-nav-inner">
             <a href="{{ url('/') }}" class="text-decoration-none d-flex align-items-center gap-2 text-white">
-                <img src="{{ asset('images/logo.jpg') }}" alt="Logo" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover;">
+                <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="brand-logo-animated" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover;">
                 <span class="fw-bold fs-6">PinjamAlat</span>
             </a>
 

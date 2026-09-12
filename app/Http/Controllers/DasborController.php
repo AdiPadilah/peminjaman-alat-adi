@@ -73,6 +73,24 @@ class DasborController extends Controller
 
         $totalKeranjang = count(session('keranjang', []));
 
+        $pinjamanAktif = Peminjaman::with(['detail.alat'])
+            ->where('user_id', $userId)
+            ->whereIn('status', [
+                StatusPeminjaman::Diajukan,
+                StatusPeminjaman::Dipinjam,
+                StatusPeminjaman::MenungguVerifikasi,
+            ])
+            ->latest()
+            ->get();
+
+        $alatTersedia = Alat::with('kategori')
+            ->where('stok_tersedia', '>', 0)
+            ->latest()
+            ->take(4)
+            ->get();
+
+        $kategoriList = Kategori::withCount('alat')->take(5)->get();
+
         $pinjamanTerbaru = Peminjaman::with(['detail.alat'])
             ->where('user_id', $userId)
             ->latest()
@@ -84,6 +102,9 @@ class DasborController extends Controller
             'menungguPersetujuan',
             'riwayatSelesai',
             'totalKeranjang',
+            'pinjamanAktif',
+            'alatTersedia',
+            'kategoriList',
             'pinjamanTerbaru'
         ));
     }

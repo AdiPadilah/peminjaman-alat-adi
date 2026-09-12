@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark navbar-custom sticky-top">
     <div class="container">
         <a class="navbar-brand" href="{{ url('/') }}">
-            <img src="{{ asset('images/logo.jpg') }}" alt="Logo" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover;">
+            <img src="{{ asset('images/logo.jpg') }}" alt="Logo" class="brand-logo-animated" style="width: 34px; height: 34px; border-radius: 8px; object-fit: cover;">
             <div>
                 <div>PinjamAlat</div>
             </div>
